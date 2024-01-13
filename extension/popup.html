@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YT-Notes-Extension</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5; 
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    form {
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 2000px;
+    }
+
+    .row {
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    #videoTitle {
+      width: 100%; 
+      box-sizing: border-box; 
+    }
+
+    #currentTimeStamp {
+      width: 100%; 
+      box-sizing: border-box; 
+    }
+
+    #noteTitle {
+      width: 100%; 
+      box-sizing: border-box; 
+    }
+
+    #submitButton {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #submitButton:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <form>
+    <div class="row">
+      <label for="videoTitle">Video Title:</label>
+      <input type="text" id="videoTitle" readonly>
+    </div>
+    <div class="row">
+      <label for="currentTimeStamp">Time Stamp:</label>
+      <input type="text" id="currentTimeStamp" readonly>
+    </div>
+    <div class="row">
+        <label for="noteTitle">Note Title:</label>
+        <input type="text" id="noteTitle">
+    </div>
+    <div class="row">
+      <label for="largeText">Notes:</label>
+      <textarea id="largeText" name="largeText" rows="5" placeholder="Add your Notes here!"></textarea>
+    </div>
+    <div class="row" style="display: none;">
+      <label for="videoUrl">Video URL:</label>
+      <input type="text" id="videoUrl" readonly>
+    </div>
+    <br>
+    <button type="button" id="submitButton">Submit</button>
+  </form>
+  <script src="popup.js"></script>
+</body>
+</html>
