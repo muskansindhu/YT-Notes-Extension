@@ -59,29 +59,31 @@ def add_notes():
             noteTitle = data["noteTitle"]
             notesText = data["largeText"]
 
-            
             page_id = get_page_id(videoTitle)
             if page_id is not None:
-
                 append_block_url = f"https://api.notion.com/v1/blocks/{page_id}/children"
                 append_payload = {
-                    "children": [
-                        {
-                            "object": "block",
-                            "type": "paragraph",
-                            "paragraph": {
-                                "rich_text": [
-                                    {"type": "text", "text": {"content": noteTitle}},
-                                    {"type": "text", "text": {"content": "\n"}},
-                                    {"type": "text", "text": {"content": "\n"}},
-                                    {"type": "text", "text": {"content": currentTimeStamp, "link": {"url": videoUrlWithTimeStamp}}},
-                                    {"type": "text", "text": {"content": "\n"}},
-                                    {"type": "text", "text": {"content": notesText}}
-                                ]
-                            },
-                        }
-                    ]
-                }
+                     "children": [
+                                    {
+                                    "object": "block",
+                                    "type": "heading_3",
+                                    "heading_3": {
+                                        "rich_text": [{ "type": "text", "text": { "content": noteTitle } }],
+                                    "children": [
+                                                {
+                                                    "object": "block",
+                                                    "type": "paragraph",
+                                                    "paragraph": {
+                                                        "rich_text": [
+                                                            {"type": "text", "text": { "content": currentTimeStamp, "link": { "url": videoUrlWithTimeStamp }}},
+                                                            {"type": "text", "text": {"content": "\n"}},
+                                                            {"type": "text", "text": {"content": notesText}}
+                                                        ],
+                                                    },
+                                                }
+                                            ],
+                                    "color":"pink_background",
+                                }}]}
 
                 res = requests.patch(append_block_url, headers=headers, json=append_payload)
             else:
@@ -95,26 +97,31 @@ def add_notes():
                         "URL": {"rich_text": [{"text": {"content": videoUrl}}]},
                     },
                     "children": [
-                        {
-                            "object": "block",
-                            "type": "paragraph",
-                            "paragraph": {
-                                "rich_text": [
-                                    {"type": "text", "text": {"content": noteTitle}},
-                                    {"type": "text", "text": {"content": "\n"}},
-                                    {"type": "text", "text": {"content": "\n"}},
-                                    {"type": "text", "text": {"content": currentTimeStamp, "link": {"url": videoUrlWithTimeStamp}}},
-                                    {"type": "text", "text": {"content": "\n"}},
-                                    {"type": "text", "text": {"content": notesText}}
-                                ]
-                            },
-                        }
-                    ]
+                                    {
+                                    "object": "block",
+                                    "type": "heading_3",
+                                    "heading_3": {
+                                        "rich_text": [{ "type": "text", "text": { "content": noteTitle } }],
+                                    "children": [
+                                                {
+                                                    "object": "block",
+                                                    "type": "paragraph",
+                                                    "paragraph": {
+                                                        "rich_text": [
+                                                            {"type": "text", "text": { "content": currentTimeStamp, "link": { "url": videoUrlWithTimeStamp }}},
+                                                            {"type": "text", "text": {"content": "\n"}},
+                                                            {"type": "text", "text": {"content": notesText}}
+                                                        ],
+                                                    },
+                                                }
+                                            ],
+                                    "color":"pink_background",
+                                }}]
                 }
-
                 res = requests.post(create_page_url, headers=headers, json=payload)
 
             print("Notion API Response Status Code:", res.status_code)
+            print(res)
 
             if res.status_code == 200:
                 return jsonify({"success": True, "message": "Note added successfully"}), 200
