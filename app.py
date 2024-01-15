@@ -19,8 +19,17 @@ headers = {
 }
 
 def get_url_with_timestamp(videoUrl, currentTimeStamp):
-    minutes, seconds = currentTimeStamp.split(':')
-    currentTimeStampInSeconds = int(minutes) * 60 + int(seconds)
+    time_parts = currentTimeStamp.split(':')
+
+    if len(time_parts) == 2:  # Format: MM:SS
+        minutes, seconds = time_parts
+        currentTimeStampInSeconds = int(minutes) * 60 + int(seconds)
+    elif len(time_parts) == 3:  # Format: HH:MM:SS
+        hours, minutes, seconds = time_parts
+        currentTimeStampInSeconds = int(hours) * 3600 + int(minutes) * 60 + int(seconds)
+    else:
+        raise ValueError("Invalid time format. Use either MM:SS or HH:MM:SS")
+
     videoUrlWithTimeStamp = f'{videoUrl}#t={currentTimeStampInSeconds}'
     return videoUrlWithTimeStamp
 

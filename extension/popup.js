@@ -61,23 +61,15 @@ document.addEventListener('DOMContentLoaded', function () {
   
     function fetchTimeStampAndConvertTime(callback) {
       chrome.tabs.executeScript(
-        { code: 'document.querySelector(".ytp-progress-bar").getAttribute("aria-valuetext")' },
+        {
+          code: 'document.querySelector("#movie_player > div.ytp-chrome-bottom > div.ytp-chrome-controls > div.ytp-left-controls > div.ytp-time-display.notranslate > span:nth-child(2) > span.ytp-time-current").innerText'
+        },
         function (result) {
-          var ariaValuetext = result[0];
-          var formattedTime = convertAriaValuetext(ariaValuetext);
-          callback(formattedTime);
+          var formattedTime = result[0];
           console.log('Formatted Time:', formattedTime);
+          callback(formattedTime);
         }
       );
-    }
-  
-    function convertAriaValuetext(ariaValuetext) {
-      var timeString = ariaValuetext.split('of')[0].trim();
-      var timeArray = timeString.split(' ');
-      var minutes = parseInt(timeArray[0]) || 0;
-      var seconds = parseInt(timeArray[2]) || 0;
-      var formattedTime = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-      return formattedTime;
     }
   
     function populateInputFields(videoTitle, formattedTime, videoUrl) {
