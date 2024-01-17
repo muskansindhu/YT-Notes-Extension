@@ -3,8 +3,24 @@ import os
 import requests
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+
+
+db = SQLAlchemy()
 
 app = Flask(__name__, template_folder="extension")
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///pagedetail.db"
+db.init_app(app)
+
+class PageDetail(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    page_id = db.Column(db.String, unique=True, nullable=False)
+    videoTitle = db.Column(db.String, unique=True, nullable=False)
+
+with app.app_context():
+    db.create_all()
+
+
 CORS(app)
 
 load_dotenv()
@@ -45,6 +61,7 @@ def get_page_id(videoTitle):
     }
 
     res = requests.post(notion_query_url, headers=headers, json=query_payload)
+    print("Fetching Page ID")
     if res.status_code == 200:
         response_data = res.json()
         results = response_data.get("results", [])
@@ -68,8 +85,11 @@ def add_notes():
             noteTitle = data["noteTitle"]
             notesText = data["largeText"]
 
-            page_id = get_page_id(videoTitle)
-            if page_id is not None:
+            existing_entry = PageDetail.query.filter_by(videoTitle=videoTitle).first()
+            
+
+            if existing_entry:
+                page_id = existing_entry.page_id
                 append_block_url = f"https://api.notion.com/v1/blocks/{page_id}/children"
                 append_payload = {
                      "children": [
@@ -128,6 +148,11 @@ def add_notes():
                                 }}]
                 }
                 res = requests.post(create_page_url, headers=headers, json=payload)
+
+                page_id = get_page_id(videoTitle)
+                new_entry = PageDetail(page_id=page_id, videoTitle=videoTitle)
+                db.session.add(new_entry)
+                db.session.commit()
 
             print("Notion API Response Status Code:", res.status_code)
             print(res)
