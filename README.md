@@ -35,4 +35,4 @@ Chrome extension built to effortlessly capture notes from YouTube videos, allowi
 --- 
 ## Sample
 
-(![alt text](extension.png))
+![alt text](extension.png)
