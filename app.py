@@ -123,7 +123,7 @@ def add_notes():
                     "parent": {"database_id": notes_database_id},
                     "properties": {
                         "Title": {"title": [{"text": {"content": videoTitle}}]},
-                        "URL": {"rich_text": [{"text": {"content": videoUrl}}]},
+                        "URL": {"url":  videoUrl},
                     },
                     "children": [
                                     {
